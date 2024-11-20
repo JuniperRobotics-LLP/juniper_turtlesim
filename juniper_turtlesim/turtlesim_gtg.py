@@ -10,7 +10,7 @@ class Turtle_GTG(Node):
         super().__init__("Go_to_Goal_Node")
         self.cmd_vel_pub = self.create_publisher(Twist, '/turtle1/cmd_vel', 10)
         self.pose_sub = self.create_subscription(Pose, '/turtle1/pose', self.pose_callback, 10)
-        self.timer = self.create_timer(0.1, self.go_to_goal)
+        self.timer = self.create_timer(0.025, self.go_to_goal)
         self.pose = Pose()
 
     def pose_callback(self, data):
@@ -20,7 +20,7 @@ class Turtle_GTG(Node):
         goal = Pose()
         goal.x = float(sys.argv[1])
         goal.y = float(sys.argv[2])
-        goal.theta = float(sys.argv[3])
+        goal.theta = 0.0
 
         new_vel = Twist()
 
@@ -33,7 +33,7 @@ class Turtle_GTG(Node):
         angle_tolerance = 0.01
 
         angle_error = angle_to_goal - self.pose.theta
-        kp = 10
+        kp = 1
 
         if abs(angle_error) > angle_tolerance:
             new_vel.angular.z = kp * angle_error
